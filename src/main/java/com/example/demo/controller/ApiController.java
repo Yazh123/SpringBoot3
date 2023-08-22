@@ -1,11 +1,14 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Employee;
@@ -17,13 +20,31 @@ public class ApiController {
 	Employee_service eser;
 	
 	@PostMapping("/")
-	public Employee addinfo(@RequestBody Employee emp) {
-		return eser.saveinfo(emp);
+	public boolean addinfo(@RequestBody Employee emp) {
+		boolean ans = eser.saveinfo(emp)!= null;
+		return ans;
 	}
 	
-	@GetMapping("{id}")
+	@PostMapping("/n")
+    public boolean addarr(@RequestBody List<Employee> emp) {
+		eser.array(emp);
+		return true;
+    }
+	
+	@GetMapping("/")
 	public List<Employee> show(){
 		return eser.showinfo();
 	}
 	
+	@GetMapping("/{id}")
+    public Optional<Employee> findid(@PathVariable int id)
+    {
+        return eser.find(id);
+    }
+	
+	@GetMapping("get")
+    public Optional<Employee> getid(@RequestParam int id)
+    {
+        return eser.get(id);
+    }
 }
